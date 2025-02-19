@@ -1,0 +1,21 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "src/assets/fonts/MsMadi-Regular.ttf",
+      "sha1": "86171ce6887db3ae5d2ddb19e1a90899d405ffa1"
+    },
+    {
+      "path": "src/assets/fonts/PermanentMarker-Regular.ttf",
+      "sha1": "bc40bfbc7eb7715af82b136429848a3c7a83a2b3"
+    },
+    {
+      "path": "src/assets/fonts/SpaceGrotesk-Regular.ttf",
+      "sha1": "d1666e3605d713802650ab26c0914238ca124274"
+    },
+    {
+      "path": "src/assets/fonts/TitilliumWeb-Regular.ttf",
+      "sha1": "c1d91bd86751bd0a186ac0323dcf47de4d0c0981"
+    }
+  ]
+}

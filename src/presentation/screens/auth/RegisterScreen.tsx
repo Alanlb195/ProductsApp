@@ -1,0 +1,121 @@
+import { Button, Input, Layout, Text } from '@ui-kitten/components'
+import { Alert, ScrollView, useWindowDimensions } from 'react-native'
+import { MyIcon } from '../../components/ui/MyIcon';
+import { StackScreenProps } from '@react-navigation/stack';
+import { RootStackParams } from '../../navigation/StackNavigator';
+import { useAuthStore } from '../../store/auth.use.store';
+import { useState } from 'react';
+
+
+interface Props extends StackScreenProps<RootStackParams, 'RegisterScreen'> { }
+
+export const RegisterScreen = ({ navigation }: Props) => {
+  const { height } = useWindowDimensions();
+  const { register } = useAuthStore();
+  const [isPosting, setIsPosting] = useState(false);
+  const [form, setForm] = useState({
+    email: '',
+    password: '',
+    fullName: '',
+  })
+
+  const authRegister = async() =>  {
+
+    if (form.email.length === 0 || form.password.length === 0, form.fullName.length === 0) {
+      return;
+    }
+
+    setIsPosting(true);
+    const wasSuccessful = await register(form.email, form.password, form.fullName);
+    if (wasSuccessful) {
+      Alert.alert('Éxito', 'Se ha creado el usuario.');
+      if (wasSuccessful) return;
+    }
+    setIsPosting(false);
+
+    Alert.alert('Error', 'No se pudo crear el usuario.');
+  }
+
+  return (
+    <Layout style={{ flex: 1 }}>
+
+      <ScrollView style={{ marginHorizontal: 40 }}>
+
+        <Layout style={{ paddingTop: height * 0.30 }}>
+          <Text category='h1'>Crear cuenta</Text>
+          <Text category='p2'>Por favor, crea una cuenta para continuar</Text>
+        </Layout>
+
+        {/* Inputs */}
+
+        <Layout style={{ marginTop: 20 }}>
+
+          <Input
+            placeholder="Nombre completo"
+            autoCapitalize='none'
+            style={{ marginBottom: 10 }}
+            accessoryLeft={<MyIcon name='person-outline' white />}
+            onChangeText={fullName => setForm({ ...form, fullName })}
+            value={form.fullName}
+          />
+
+          <Input
+            placeholder="Correo electrónico"
+            keyboardType="email-address"
+            autoCapitalize='none'
+            style={{ marginBottom: 10 }}
+            accessoryLeft={<MyIcon name='email-outline' white />}
+            onChangeText={email => setForm({ ...form, email })}
+            value={form.email}
+
+          />
+
+          <Input
+            placeholder='Contraseña'
+            autoCapitalize='none'
+            secureTextEntry
+            accessoryLeft={<MyIcon name='lock-outline' white />}
+            onChangeText={password => setForm({ ...form, password })}
+            value={form.password}
+
+            style={{ marginBottom: 10 }}
+          />
+
+          <Layout style={{ height: 20 }} />
+
+          <Layout>
+            <Button
+              accessoryRight={<MyIcon name='arrow-forward-outline' white />}
+              onPress={ authRegister }
+              disabled= { isPosting }
+            >
+              Crear
+            </Button>
+          </Layout>
+
+          {/* informacion para crear cuenta */}
+          <Layout style={{ height: 50 }} />
+
+          <Layout style={{
+            alignItems: 'flex-end',
+            flexDirection: 'row',
+            justifyContent: 'center'
+          }}>
+            <Text>¿Ya tienes una cuenta?</Text>
+            <Text
+              status='primary'
+              category='s1'
+              onPress={() => navigation.goBack()}
+            >
+              {' '}
+              ingresar{' '}
+            </Text>
+          </Layout>
+
+        </Layout>
+
+      </ScrollView>
+
+    </Layout>
+  )
+}
