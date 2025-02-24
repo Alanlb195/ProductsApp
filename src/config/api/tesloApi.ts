@@ -1,4 +1,4 @@
-import { STAGE, API_URL as PROD_URL, API_URL_IOS, API_URL_ANDROID } from "@env";
+import { STAGE, API_URL as PROD_URL, ANDROID_API_URL, IOS_API_URL } from '@env';
 import { Platform } from "react-native";
 import axios from 'axios';
 import { StorageAdapter } from "../adapters/storage-adapter";
@@ -9,8 +9,8 @@ export const API_URL =
     (STAGE === 'prod')
         ? PROD_URL
         : Platform.OS === 'ios'
-            ? API_URL_IOS
-            : API_URL_ANDROID;
+            ? IOS_API_URL
+            : ANDROID_API_URL;
 
 const tesloApi = axios.create({
     baseURL: API_URL,

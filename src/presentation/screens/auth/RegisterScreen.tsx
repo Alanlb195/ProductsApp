@@ -5,11 +5,13 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParams } from '../../navigation/StackNavigator';
 import { useAuthStore } from '../../store/auth.use.store';
 import { useState } from 'react';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 
 interface Props extends StackScreenProps<RootStackParams, 'RegisterScreen'> { }
 
 export const RegisterScreen = ({ navigation }: Props) => {
+  const { top } = useSafeAreaInsets();
   const { height } = useWindowDimensions();
   const { register } = useAuthStore();
   const [isPosting, setIsPosting] = useState(false);
@@ -19,7 +21,7 @@ export const RegisterScreen = ({ navigation }: Props) => {
     fullName: '',
   })
 
-  const authRegister = async() =>  {
+  const authRegister = async () => {
 
     if (form.email.length === 0 || form.password.length === 0, form.fullName.length === 0) {
       return;
@@ -28,22 +30,30 @@ export const RegisterScreen = ({ navigation }: Props) => {
     setIsPosting(true);
     const wasSuccessful = await register(form.email, form.password, form.fullName);
     if (wasSuccessful) {
-      Alert.alert('Éxito', 'Se ha creado el usuario.');
+      Alert.alert('Success', 'User created.');
       if (wasSuccessful) return;
     }
     setIsPosting(false);
 
-    Alert.alert('Error', 'No se pudo crear el usuario.');
+    Alert.alert('Error', 'User cannot be created.');
   }
 
   return (
-    <Layout style={{ flex: 1 }}>
+    <Layout style={{ flex: 1, top: top, }}>
 
-      <ScrollView style={{ marginHorizontal: 40 }}>
+      <ScrollView
+        contentContainerStyle={{
+          paddingHorizontal: 40,
+          height: height - top,
+          justifyContent: 'center'
+        }}
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+      >
 
-        <Layout style={{ paddingTop: height * 0.30 }}>
-          <Text category='h1'>Crear cuenta</Text>
-          <Text category='p2'>Por favor, crea una cuenta para continuar</Text>
+        <Layout style={{ alignItems: 'center' }}>
+          <Text category='h1'>Create account</Text>
+          <Text category='p2'>Please, create an account to continue</Text>
         </Layout>
 
         {/* Inputs */}
@@ -51,7 +61,7 @@ export const RegisterScreen = ({ navigation }: Props) => {
         <Layout style={{ marginTop: 20 }}>
 
           <Input
-            placeholder="Nombre completo"
+            placeholder="Full name"
             autoCapitalize='none'
             style={{ marginBottom: 10 }}
             accessoryLeft={<MyIcon name='person-outline' white />}
@@ -60,7 +70,7 @@ export const RegisterScreen = ({ navigation }: Props) => {
           />
 
           <Input
-            placeholder="Correo electrónico"
+            placeholder="Email"
             keyboardType="email-address"
             autoCapitalize='none'
             style={{ marginBottom: 10 }}
@@ -71,7 +81,7 @@ export const RegisterScreen = ({ navigation }: Props) => {
           />
 
           <Input
-            placeholder='Contraseña'
+            placeholder='Password'
             autoCapitalize='none'
             secureTextEntry
             accessoryLeft={<MyIcon name='lock-outline' white />}
@@ -86,14 +96,14 @@ export const RegisterScreen = ({ navigation }: Props) => {
           <Layout>
             <Button
               accessoryRight={<MyIcon name='arrow-forward-outline' white />}
-              onPress={ authRegister }
-              disabled= { isPosting }
+              onPress={authRegister}
+              disabled={isPosting}
             >
-              Crear
+              Create
             </Button>
           </Layout>
 
-          {/* informacion para crear cuenta */}
+          {/* information to create account */}
           <Layout style={{ height: 50 }} />
 
           <Layout style={{
@@ -101,14 +111,14 @@ export const RegisterScreen = ({ navigation }: Props) => {
             flexDirection: 'row',
             justifyContent: 'center'
           }}>
-            <Text>¿Ya tienes una cuenta?</Text>
+            <Text>Do you have an account?</Text>
             <Text
               status='primary'
               category='s1'
               onPress={() => navigation.goBack()}
             >
               {' '}
-              ingresar{' '}
+              Login page{' '}
             </Text>
           </Layout>
 

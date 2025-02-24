@@ -1,4 +1,4 @@
-import { tesloApi } from "../../config/api/tesloApi"
+import { API_URL, tesloApi } from "../../config/api/tesloApi"
 import { User } from "../../domain/entities/user";
 import { AuthResponse } from "../../infrastructure/interfaces/auth.response";
 

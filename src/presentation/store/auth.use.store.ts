@@ -22,55 +22,35 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
     user: undefined,
 
     login: async (email: string, password: string) => {
-        try {    
-            const resp = await authLogin(email, password);
-    
-            if (!resp || !resp.token || !resp.user) {
-                set((state) => ({
-                    ...state,
-                    status: 'unauthenticated',
-                    token: undefined,
-                    user: undefined
-                }));
-                return false;
-            }
-                await StorageAdapter.setItem('token', resp.token);
-    
-            set((state) => ({
-                ...state,
-                status: 'authenticated',
-                token: resp.token,
-                user: resp.user
-            }));
-    
-            return true;
-        } catch (error) {
-            set((state) => ({
-                ...state,
-                status: 'unauthenticated',
-                token: undefined,
-                user: undefined
-            }));
+        const resp = await authLogin(email, password);
+
+        if (!resp) {
+            set(({ status: 'unauthenticated', token: undefined, user: undefined }));
             return false;
         }
+
+        await StorageAdapter.setItem('token', resp.token);
+        console.log(`User of the session: ${resp.user}, Token: ${resp.token}`)
+        set(({ status: 'authenticated', token: resp.token, user: resp.user }));
+
+        return true;
     },
-    
+
     checkStatus: async () => {
         const resp = await authCheckStatus();
 
         if (!resp) {
             set({ status: 'unauthenticated', token: undefined, user: undefined });
-            await StorageAdapter.removeItem('token');
+            // await StorageAdapter.removeItem('token');
             return;
         }
 
-        // Save token and user in local storage
         await StorageAdapter.setItem('token', resp.token);
+        console.log(`Checking status, authStore - User of the session: ${resp.user}, Token: ${resp.token}`)
         set({ status: 'authenticated', token: resp.token, user: resp.user });
     },
 
     logOut: async () => {
-        // Remove token from local storage
         await StorageAdapter.removeItem('token');
         set({ status: 'unauthenticated', token: undefined, user: undefined });
     },
@@ -82,7 +62,6 @@ export const useAuthStore = create<AuthState>()((set, get) => ({
             set({ status: 'unauthenticated', token: undefined, user: undefined })
             return false;
         }
-        // Save token and user in local storage
         await StorageAdapter.setItem('token', resp.token);
 
         set({ status: 'authenticated', token: resp.token, user: resp.user });

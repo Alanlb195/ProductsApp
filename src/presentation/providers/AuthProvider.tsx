@@ -3,6 +3,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { RootStackParams } from '../navigation/StackNavigator';
 import { PropsWithChildren, useEffect } from 'react';
 import { useAuthStore } from '../store/auth.use.store';
+import { API_URL } from '../../config/api/tesloApi';
 
 export const AuthProvider = ({ children }: PropsWithChildren) => {
 
@@ -14,6 +15,10 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
     }, [])
 
     useEffect(() => {
+
+        console.log('API URL used: ')
+        console.log(API_URL);
+
         if (status !== 'checking') {
             if (status === 'authenticated') {
                 navigator.reset({

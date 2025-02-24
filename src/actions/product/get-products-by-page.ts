@@ -6,9 +6,11 @@ import { ProductMapper } from "../../infrastructure/mappers/product.mapper";
 export const getProductsByPage = async (page: number, limit: number = 20): Promise<Product[]> => {
 
     try {
+
         const { data } = await tesloApi.get<TesloProduct[]>(`/products?limit=${limit}&offset=${page * 10}`);
 
         const products = data.map(ProductMapper.tesloProductToEntity);
+        
         return products;
 
     }

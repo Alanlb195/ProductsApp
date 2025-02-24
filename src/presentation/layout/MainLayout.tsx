@@ -2,21 +2,23 @@ import { useNavigation } from '@react-navigation/native';
 import { Divider, Layout, TopNavigation, TopNavigationAction } from '@ui-kitten/components';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { MyIcon } from '../components/ui/MyIcon';
+import { useWindowDimensions } from 'react-native';
 
 
 interface Props {
     title: string;
-    subTitle: string;
+    subTitle?: string;
 
     rightAction?: () => void;
     rightActionIcon?: string;
 
-    children: React.ReactNode;
+    children?: React.ReactNode;
 }
 
-export const MainLayout = ({ children, rightAction, subTitle, title, rightActionIcon }: Props) => {
+export const MainLayout = ({ children, subTitle, title, rightAction, rightActionIcon }: Props) => {
 
     const { top } = useSafeAreaInsets();
+    const { height } = useWindowDimensions();
     const { canGoBack, goBack } = useNavigation();
 
     const renderBackAction = (): React.ReactElement => (
@@ -26,26 +28,30 @@ export const MainLayout = ({ children, rightAction, subTitle, title, rightAction
         />
     )
 
-    const renderRightAction = () => {
+    const RenderRightAction = () => {
+        if (rightAction === undefined || rightActionIcon === undefined) return null;
+
         return (
             <TopNavigationAction
                 onPress={rightAction}
+                icon={<MyIcon name={rightActionIcon} />}
             />
         )
     }
 
     return (
-        <Layout style={{ paddingTop: top }}>
+        <Layout style={{ flex: 1, paddingTop: top }}>
 
             <TopNavigation
                 title={title}
                 subtitle={subTitle}
                 alignment='center'
                 accessoryLeft={canGoBack() ? renderBackAction : undefined}
+                accessoryRight={() => <RenderRightAction />}
             />
             <Divider />
 
-            <Layout style={{ height: '100%' }}>
+            <Layout style={{ flex: 1 }}>
                 {children}
             </Layout>
 

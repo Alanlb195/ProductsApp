@@ -5,6 +5,7 @@ import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParams } from '../../navigation/StackNavigator';
 import { useState } from 'react';
 import { useAuthStore } from '../../store/auth.use.store';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 
 interface Props extends StackScreenProps<RootStackParams, 'LoginScreen'> { }
@@ -14,6 +15,7 @@ export const LoginScreen = ({ navigation }: Props) => {
   const { login } = useAuthStore();
   const [isPosting, setIsPosting] = useState(false)
   const { height } = useWindowDimensions();
+  const { top } = useSafeAreaInsets();
 
   const [form, setForm] = useState({
     email: '',
@@ -31,26 +33,35 @@ export const LoginScreen = ({ navigation }: Props) => {
     setIsPosting(false);
 
     if (wasSuccessful) return;
-    Alert.alert('Error', 'unexpected error');
+    Alert.alert('Error', 'Invalid user');
 
   }
 
   return (
-    <Layout style={{ flex: 1 }}>
+    <Layout style={{ flex: 1, top: top, }}>
 
-      <ScrollView style={{ marginHorizontal: 40 }}>
+      <ScrollView
+        contentContainerStyle={{
+          paddingHorizontal: 40,
+          height: height - top,
+          justifyContent: 'center'
+        }}
+        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+      >
 
-        <Layout style={{ paddingTop: height * 0.35 }}>
+        <Layout style={{ 
+          alignItems: 'center'
+         }}>
           <Text category='h1'>Login</Text>
-          <Text category='p2' style={{ marginTop: 10 }}>Por favor, ingrese para continuar</Text>
+          <Text category='p2' style={{ marginTop: 10 }}>Please login to continue</Text>
         </Layout>
 
-        {/* Inputs */}
-
+        {/* Inputs and Login button */}
         <Layout style={{ marginTop: 20 }}>
 
           <Input
-            placeholder="Correo electrónico"
+            placeholder="Email"
             keyboardType="email-address"
             autoCapitalize='none'
             style={{ marginBottom: 10 }}
@@ -60,7 +71,7 @@ export const LoginScreen = ({ navigation }: Props) => {
           />
 
           <Input
-            placeholder='Contraseña'
+            placeholder='Password'
             autoCapitalize='none'
             secureTextEntry
             accessoryLeft={<MyIcon name='lock-outline' white />}
@@ -77,11 +88,11 @@ export const LoginScreen = ({ navigation }: Props) => {
               accessoryRight={<MyIcon name='arrow-forward-outline' white />}
               onPress={onLogin}
             >
-              Ingresar
+              Login
             </Button>
           </Layout>
 
-          {/* informacion para crear cuenta */}
+          {/* information to create account */}
           <Layout style={{ height: 50 }} />
 
           <Layout style={{
@@ -89,14 +100,14 @@ export const LoginScreen = ({ navigation }: Props) => {
             flexDirection: 'row',
             justifyContent: 'center',
           }}>
-            <Text>¿No tienes cuenta?</Text>
+            <Text>Do you have an account?</Text>
             <Text
               status='primary'
               category='s1'
               onPress={() => navigation.navigate('RegisterScreen')}
             >
               {' '}
-              crea una{' '}
+              Create account{' '}
             </Text>
           </Layout>
 
