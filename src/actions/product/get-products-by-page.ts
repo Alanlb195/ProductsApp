@@ -10,8 +10,10 @@ export const getProductsByPage = async (page: number, limit: number = 20): Promi
         const { data } = await tesloApi.get<TesloProduct[]>(`/products?limit=${limit}&offset=${page * 10}`);
 
         const products = data.map(ProductMapper.tesloProductToEntity);
-        
-        return products;
+
+        const sortedProducts = products.sort((a, b) => a.title.localeCompare(b.title));
+
+        return sortedProducts;
 
     }
     catch (error) {

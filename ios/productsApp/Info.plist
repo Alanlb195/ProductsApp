@@ -31,8 +31,19 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>Capture Image</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string/>
+	<string></string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Select image/video from photos</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>MsMadi-Regular.ttf</string>
+		<string>PermanentMarker-Regular.ttf</string>
+		<string>SpaceGrotesk-Regular.ttf</string>
+		<string>TitilliumWeb-Regular.ttf</string>
+	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
@@ -47,12 +58,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-	<key>UIAppFonts</key>
-	<array>
-		<string>MsMadi-Regular.ttf</string>
-		<string>PermanentMarker-Regular.ttf</string>
-		<string>SpaceGrotesk-Regular.ttf</string>
-		<string>TitilliumWeb-Regular.ttf</string>
-	</array>
 </dict>
 </plist>

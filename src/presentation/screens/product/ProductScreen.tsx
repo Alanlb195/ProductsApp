@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { ScrollView } from 'react-native';
+import { Alert, ScrollView } from 'react-native';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { StackScreenProps } from '@react-navigation/stack';
@@ -13,6 +13,7 @@ import { MyIcon } from '../../components/ui/MyIcon';
 import { ProductImages } from '../../components/products/ProductImages';
 import { getProductById, updateCreateProduct } from '../../../actions/product';
 import { genders, sizes } from '../../../config/constants/variables';
+import { CameraAdapter } from '../../../config/adapters/camera-adapter';
 
 
 interface Props extends StackScreenProps<RootStackParams, 'ProductScreen'> { }
@@ -35,6 +36,11 @@ export const ProductScreen = ({ route }: Props) => {
       productIdRef.current = data.id
       queryClient.invalidateQueries({ queryKey: ['products', 'infinite'] });
       queryClient.invalidateQueries({ queryKey: ['product', data.id] });
+      Alert.alert('Ok', 'product successfully updated.')
+    },
+    onError(error) {
+      console.error('Mutation error', error);
+      Alert.alert('Error', 'There was an error updating the product.');
     }
   })
 
@@ -49,10 +55,15 @@ export const ProductScreen = ({ route }: Props) => {
       onSubmit={values => mutation.mutate(values)}
     >
       {
-        ({ handleChange, handleSubmit, values, errors, setFieldValue }) => (
+        ({ handleChange, handleSubmit, values, setFieldValue }) => (
           <MainLayout
-            title={values.title}
+            title='Products'
             subTitle={`Price: ${values.price} `}
+            rightAction={ async() => {
+              const photos = await CameraAdapter.getPicturesFromLibrary();
+              setFieldValue('images', [...values.images, ...photos])
+            } }
+            rightActionIcon='camera-outline'
           >
 
             <ScrollView>
@@ -162,7 +173,7 @@ export const ProductScreen = ({ route }: Props) => {
               </Button>
 
               <Text>
-                {JSON.stringify(values, null, 4)}
+                {JSON.stringify(values, null, 2)}
               </Text>
 
               <Layout style={{ height: 100 }} />

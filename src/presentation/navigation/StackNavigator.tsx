@@ -35,8 +35,8 @@ export const StackNavigator = () => {
       <Stack.Screen options={{ cardStyleInterpolator: fadeAnimation }} name="LoadingScreen" component={LoadingScreen} />
       <Stack.Screen options={{ cardStyleInterpolator: fadeAnimation }} name="LoginScreen" component={LoginScreen} />
       <Stack.Screen options={{ cardStyleInterpolator: fadeAnimation }} name="RegisterScreen" component={RegisterScreen} />
-      <Stack.Screen options={{ cardStyleInterpolator: fadeAnimation }} name="HomeScreen" component={HomeScreen} />
-      <Stack.Screen name="ProductScreen" component={ProductScreen} />
+      <Stack.Screen options={{animation: 'slide_from_right'}} name="HomeScreen" component={HomeScreen} />
+      <Stack.Screen options={{animation: 'slide_from_right'}} name="ProductScreen" component={ProductScreen} />
     </Stack.Navigator>
   );
 }

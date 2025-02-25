@@ -43,7 +43,7 @@ export const MainLayout = ({ children, subTitle, title, rightAction, rightAction
         <Layout style={{ flex: 1, paddingTop: top }}>
 
             <TopNavigation
-                title={title}
+                title={ title }
                 subtitle={subTitle}
                 alignment='center'
                 accessoryLeft={canGoBack() ? renderBackAction : undefined}

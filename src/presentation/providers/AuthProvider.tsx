@@ -16,9 +16,6 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
 
     useEffect(() => {
 
-        console.log('API URL used: ')
-        console.log(API_URL);
-
         if (status !== 'checking') {
             if (status === 'authenticated') {
                 navigator.reset({
